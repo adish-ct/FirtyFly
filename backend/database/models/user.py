@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, func
-from database.database import Base
+from sqlalchemy.orm import relationship
+from ..database import Base
+from .followers import followers_association
+
 from database.models.base import TimeStampMixin
 
 class User(Base, TimeStampMixin):
@@ -17,4 +20,16 @@ class User(Base, TimeStampMixin):
     active_account = Column(Boolean, default=True)
     active_now = Column(Boolean, default=False)
     last_login = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    # Back relation-ships
+    profile = relationship("Profile", back_populates="user", uselist=False)
+
+    # followers/following many-to-many
+    followers = relationship(
+        "user",
+        secondary=followers_association,
+        primaryjoin=id == followers_association.c.followed_id,
+        secondaryjoin=id == followers_association.c.follower_id,
+        backref="following"
+    )
 

@@ -1,5 +1,3 @@
-from symtable import Class
-
 from sqlalchemy import Column, DateTime, func
 
 class TimeStampMixin:

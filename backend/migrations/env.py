@@ -6,8 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from database.database import Base
-from database.models.user import User
-from database.models.base import TimeStampMixin
+from database import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
