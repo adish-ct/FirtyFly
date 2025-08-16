@@ -3,7 +3,7 @@ from sqlalchemy import String, Integer, Column, ForeignKey, Enum, Date
 from sqlalchemy.orm import relationship
 
 from .base import TimeStampMixin
-from ..database import Base
+from database.database import Base
 
 
 class GenderEnum(enum.Enum):

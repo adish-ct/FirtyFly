@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Table, Integer, ForeignKey
-from ..database import Base
+from database.database import Base
 
 # Followers associated table
 followers_association = Table(

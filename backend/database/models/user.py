@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, func
 from sqlalchemy.orm import relationship
-from ..database import Base
+from database.database import Base
 from .followers import followers_association
 
 from database.models.base import TimeStampMixin
@@ -26,7 +26,7 @@ class User(Base, TimeStampMixin):
 
     # followers/following many-to-many
     followers = relationship(
-        "user",
+        "User",
         secondary=followers_association,
         primaryjoin=id == followers_association.c.followed_id,
         secondaryjoin=id == followers_association.c.follower_id,
