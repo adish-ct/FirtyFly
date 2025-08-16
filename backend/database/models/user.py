@@ -10,7 +10,7 @@ class User(Base, TimeStampMixin):
     email = Column(String, unique=True, index=True, nullable=False)
     phone = Column(String, unique=True, index=True, nullable=False)
     bio = Column(String, default="Hey! I'm new here 😎")
-    hashed_password = Column(String=True, nullable=True)
+    hashed_password = Column(String, nullable=True)
 
     # account status
     is_verified = Column(Boolean, default=False)
