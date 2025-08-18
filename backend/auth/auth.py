@@ -10,6 +10,15 @@ def create_user(db: Session, user: UserCreate):
     if existing_user:
         raise ValueError("Email already registered.")
 
+    existing_user_phone = db.query(User).filter(User.phone == user.phone).first()
+    if existing_user_phone:
+        raise ValueError("Phone already registered.")
+
+    existing_user_username = db.query(User).filter(User.username == user.username).first()
+    if existing_user_username:
+        raise ValueError("Username already registered.")
+
+
     # Creating instance for User model based on the input.
     db_user = User(
         username=user.username,

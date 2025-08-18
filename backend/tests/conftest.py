@@ -11,11 +11,12 @@ from database.models.user import User
 from database.models.profile import Profile
 from database.models.followers import followers_association
 
-# In-memory SQLite database
+# Test database URL (use a separate DB for tests!)
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/fliftyfly-test"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 # Override FastAPI dependency to use test DB
 def override_get_db():
@@ -25,13 +26,20 @@ def override_get_db():
     finally:
         db.close()
 
+
 app.dependency_overrides[get_db] = override_get_db
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_database():
+    """Create all tables before tests, drop them after tests"""
+    Base.metadata.create_all(bind=engine)
+    yield
+    Base.metadata.drop_all(bind=engine)
+
 
 @pytest.fixture(scope="module")
 def client():
-    # Create all tables in test DB
-    Base.metadata.create_all(bind=engine)
+    """Fixture for FastAPI test client using the test DB"""
     with TestClient(app) as c:
         yield c
-    # Drop tables after tests
-    Base.metadata.drop_all(bind=engine)

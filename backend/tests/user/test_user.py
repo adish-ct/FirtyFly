@@ -1,7 +1,6 @@
 import pytest
-from fastapi.testclient import TestClient
 
-def test_register_user(client: TestClient):
+def test_register_user(client):
     url = "/users/register"
     payload = {
         "username": "adish",

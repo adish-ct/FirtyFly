@@ -24,7 +24,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     except ValueError as e:
         logger.warning(f"Value Error Raised : {str(e)}")
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_409_CONFLICT,
             detail=str(e)
         )
 

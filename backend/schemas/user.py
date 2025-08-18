@@ -1,6 +1,6 @@
 # Pydantic validation (for API inputs/outputs).
 # This file defines how requests/responses should look.
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 # ---------------------------
 # Request schema (input)
@@ -24,5 +24,4 @@ class UserResponse(BaseModel):
     bio: str
     active_now: bool
 
-    class Config:
-        orm_mode = True  # Tells Pydantic it can read data directly from SQLAlchemy models
+    model_config = ConfigDict(from_attributes=True)
