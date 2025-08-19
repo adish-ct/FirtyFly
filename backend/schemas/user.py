@@ -3,9 +3,8 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 # ---------------------------
-# Request schema (input)
+# Request schema (input) Register
 # ---------------------------
-
 class UserCreate(BaseModel):
     username: str
     email: EmailStr # validates format of email automatically
@@ -13,9 +12,8 @@ class UserCreate(BaseModel):
     password: str # plain password (will be hashed later)
 
 # ---------------------------
-# Response schema (output)
+# Response schema (output) Register
 # ---------------------------
-
 class UserResponse(BaseModel):
     id: int
     username: str
@@ -25,3 +23,20 @@ class UserResponse(BaseModel):
     active_now: bool
 
     model_config = ConfigDict(from_attributes=True)
+
+# ---------------------------
+# Request schema (input) Login
+# ---------------------------
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+# ---------------------------
+# Response schema (output) Login
+# ---------------------------
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+

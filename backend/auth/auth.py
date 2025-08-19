@@ -1,8 +1,12 @@
+from http.client import HTTPException
+
+from alembic.util import status
 from sqlalchemy.orm import Session
 
-from core.security import hash_password
+from core.security import hash_password, verify_password, create_access_token
 from database.models.user import User
-from schemas.user import UserCreate
+from schemas.user import UserCreate, UserLogin
+
 
 def create_user(db: Session, user: UserCreate):
     # check if email already exists
@@ -31,4 +35,19 @@ def create_user(db: Session, user: UserCreate):
     db.commit() # commiting the changes
     db.refresh(db_user) # after commiting refreshing the db result.
     return db_user
+
+
+def user_login(db: Session, user_data: UserLogin):
+    # 1. Find user by email
+    user = db.query(User).filter(User.username == user_data.username).first()
+    if not user:
+        raise ValueError("Invalid Credential.")
+
+    # 2. Verify password
+    if not verify_password(user_data.password, user.hashed_password):
+        raise ValueError("Invalid Credential.")
+
+    access_token = create_access_token(data={"sub": str(user.id)})
+
+    return {"access_token": access_token, "token_type": "bearer"}
 
