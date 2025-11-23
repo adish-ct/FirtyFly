@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { registerUser } from "../../../lib/api/authApi";
+import toast from "react-hot-toast";
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -15,9 +17,20 @@ export default function RegisterForm() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        console.log("Submitted");
+
         e.preventDefault();
-        console.log("Submitted:", formData);
+        try {
+            const response = await registerUser(formData)
+            if (response) {
+                toast.success("🎉 Registration Successful!")
+                console.log(response.data);
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.detail)
+        }
+
     };
 
     const handleGoogleLogin = () => {
